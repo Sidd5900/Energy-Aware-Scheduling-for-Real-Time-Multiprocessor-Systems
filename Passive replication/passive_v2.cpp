@@ -2,6 +2,19 @@
 
 using namespace std;
 
+// tid: task id / task number [0, n-1]
+// replica_num: replica number of the current task instance (indexed from 0 i.e the primary copy has replica_num = 0)
+// exe_time: execution time at fmax
+// period: time period of the task instance
+// deadline: deadline of the task instance
+// reliability: reliability target of the task instance (0 to 1)
+// freq: frequency assigned to the task instance
+// replicas: number of replicas of the task required to achieve the reliability target
+// energy: energy consumed by the task instance
+// cpu_time: actual execution time of the task instance (when running at freq)
+// arrival_time: absolute time at which the task instance arrived
+// activation_time: at what point of time can the task instance be scheduled on any of the processors
+// (for example the activation_time of replica 1 will be the finish time of replica 0)
 struct Task{
     int tid;
     int replica_num;
@@ -40,6 +53,7 @@ struct Schedule
     }
 };
 
+// the one with lower activation time comes first in the priority queue
 struct activation_time_comp{
 bool operator()(const Task &a,const Task &b)
 {
@@ -47,6 +61,7 @@ bool operator()(const Task &a,const Task &b)
 }
 };
 
+// the one with lower absolute deadline comes first in the priority queue
 struct deadline_comp{
 bool operator()(const Task &a,const Task &b)
 {
@@ -66,6 +81,11 @@ bool operator()(const Task &a,const Task &b)
 // hyperperiod : lcm of all the task periods
 // schedule[k] will store the schedule of the k'th processor
 // allocation[i][j] will store the processor assigned to j'th replica of task i
+// global_queue contains all task instances that can be scheduled sorted by their activation time
+// ready_queue[k] stores all the tasks sorted by absolute deadline that can be scheduled to Processor 'k' at current point of time
+// global_time is the current time
+// last_idle_time[k] will store at what time was the Processor 'k' free or will be free
+// min_energy will store the energy consumed by all the tasks collectively
 // task_to_processors[i] will store the set of processors already allocated to different replicas of task[i]
 
 int n,m,F;
@@ -124,6 +144,7 @@ bool schedule_edf(int task_num, int replica_num)
     while(!global_queue.empty())
     {
         global_time = global_queue.top().activation_time;
+		
         // pop all tasks from the global queue upto the current time and push into the ready queue of their respective allocated processor
         while(!global_queue.empty() && global_queue.top().activation_time <= global_time)
         {
@@ -157,15 +178,16 @@ bool schedule_edf(int task_num, int replica_num)
                     last_idle_time[k] = finish_time;
 
                     // push the next replica (backup copy) if any into the global queue
-                    if(rn != temp.replicas-1 && rn+1 <= replica_num)
+                    if(rn != temp.replicas-1 && (tn != task_num || rn+1 <= replica_num))
                     {
                         Task next_replica = temp;
                         next_replica.activation_time = finish_time;
+                        next_replica.arrival_time = temp.arrival_time;
                         next_replica.replica_num = rn + 1;
                         global_queue.push(next_replica);
                     }
                 }
-                else
+                else	// deadline missed
                 {
                     return false;
                 }

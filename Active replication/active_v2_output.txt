@@ -1,0 +1,218 @@
+﻿// n tasks : 0,1,2,...,n-1
+// m processors : 0,1,2,...,m-1
+// F : number of available frequency levels of the processors
+// freq_list : list of the available normalized frequencies where size(freq_list)=F
+
+// Input 
+// n m
+// F
+// freq_list[i] for all i in 0 to F-1
+// next n lines contain the description of the tasks in the order
+// execution time, period, deadline, reliability
+
+________________
+Testcases:
+________________
+
+3 4
+4
+0.25 0.5 0.75 1
+5 20 20 0.9
+15 20 20 0.9
+10 10 10 0.9
+Possible
+
+Allocation[i][j] is the processor assigned to j'th instance of i'th task
+0  1
+0  1
+2  3
+
+Schedule
+Task, Start Time, Finish Time
+
+Processor P0
+0  0  5
+1  5  20
+
+Processor P1
+0  0  5
+1  5  20
+
+Processor P2
+2  0  10
+2  10  20
+
+Processor P3
+2  0  10
+2  10  20
+
+
+Visualization of Schedule
+P0   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P1   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+P3   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+
+/******************************
+
+
+
+3 4
+4
+0.25 0.5 0.75 1
+5 20 20 0.9
+15 15 15 0.9
+10 10 10 0.9
+Not possible
+
+/******************************
+
+
+
+3 4
+4
+0.25 0.5 0.75 1
+5 15 15 0.9
+15 15 15 0.9
+10 15 15 0.9
+Possible
+
+Allocation[i][j] is the processor assigned to j'th instance of i'th task
+0  1
+2  3
+0  1
+
+Schedule
+Task, Start Time, Finish Time
+
+Processor P0
+0  0  5
+2  5  15
+
+Processor P1
+0  0  5
+2  5  15
+
+Processor P2
+1  0  15
+
+Processor P3
+1  0  15
+
+
+Visualization of Schedule
+P0   0   0   0   0   0   2   2   2   2   2   2   2   2   2   2
+P1   0   0   0   0   0   2   2   2   2   2   2   2   2   2   2
+P2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P3   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+
+/******************************
+
+
+
+3 6
+4
+0.25 0.5 0.75 1
+5 5 5 0.9
+15 15 15 0.9
+10 10 10 0.9
+Possible
+
+Allocation[i][j] is the processor assigned to j'th instance of i'th task
+0  1
+2  3
+4  5
+
+Schedule
+Task, Start Time, Finish Time
+
+Processor P0
+0  0  5
+0  5  10
+0  10  15
+0  15  20
+0  20  25
+0  25  30
+
+Processor P1
+0  0  5
+0  5  10
+0  10  15
+0  15  20
+0  20  25
+0  25  30
+
+Processor P2
+1  0  15
+1  15  30
+
+Processor P3
+1  0  15
+1  15  30
+
+Processor P4
+2  0  10
+2  10  20
+2  20  30
+
+Processor P5
+2  0  10
+2  10  20
+2  20  30
+
+
+Visualization of Schedule
+P0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+P1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+P2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P3   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P4   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+P5   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+
+/******************************
+
+
+
+3 4
+4
+0.25 0.5 0.75 1
+5 20 20 0.9
+15 20 20 0.9
+10 20 20 0.9
+Possible
+
+Allocation[i][j] is the processor assigned to j'th instance of i'th task
+0  1
+0  1
+2  3
+
+Schedule
+Task, Start Time, Finish Time
+
+Processor P0
+0  0  5
+1  5  20
+
+Processor P1
+0  0  5
+1  5  20
+
+Processor P2
+2  0  10
+
+Processor P3
+2  0  10
+
+
+Visualization of Schedule
+P0   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P1   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P2   2   2   2   2   2   2   2   2   2   2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+P3   2   2   2   2   2   2   2   2   2   2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+
+________________
+
+-> Task and processors are indexed from 0
+-> 2 replicas of each task is scheduled
+-> All replicas run at fmax
+-> -1 in the above visualization indicated that the processor is ideal at that point of time

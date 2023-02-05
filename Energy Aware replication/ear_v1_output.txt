@@ -1,0 +1,144 @@
+3 4
+4
+0.25 0.5 0.75 1
+5 30 30 0.9
+10 30 30 0.9
+15 30 30 0.9
+Possible
+
+Allocation[i][j] is the processor assigned to j'th instance of i'th task
+0  1  2
+0  1  2
+1  0  2
+
+Schedule:
+Task number, Replica number, Start Time, Finish Time
+
+Processor P0
+0  0  0  5
+1  0  5  15
+2  1  15  30
+
+Processor P1
+2  0  0  15
+0  1  15  20
+1  1  20  30
+
+Processor P2
+2  2  0  15
+0  2  15  20
+1  2  20  30
+
+Processor P3
+
+
+Visualization of Schedule
+P0   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+P1   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1
+P2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1
+P3  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+
+Energy consumed:
+90
+
+/*************************************************************
+
+3 6
+4
+0.25 0.5 0.75 1
+5 15 15 0.9
+10 30 30 0.9
+15 30 30 0.9
+Possible
+
+Allocation[i][j] is the processor assigned to j'th instance of i'th task
+0  1  2
+0  1  2
+3  4  5
+
+Schedule:
+Task number, Replica number, Start Time, Finish Time
+
+Processor P0
+0  0  0  5
+1  0  5  15
+0  0  15  20
+
+Processor P1
+0  1  5  10
+1  1  15  25
+0  1  25  30
+
+Processor P2
+0  2  0  5
+1  2  5  15
+0  2  15  20
+
+Processor P3
+2  0  0  15
+
+Processor P4
+2  1  15  30
+
+Processor P5
+2  2  0  15
+
+
+Visualization of Schedule
+P0   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+P1  -1  -1  -1  -1  -1   0   0   0   0   0  -1  -1  -1  -1  -1   1   1   1   1   1   1   1   1   1   1   0   0   0   0   0
+P2   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+P3   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+P4  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+P5   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+
+Energy consumed:
+90
+
+/*********************************************************
+
+3 5
+4
+0.25 0.5 0.75 1
+15 30 30 0.9
+15 30 30 0.9
+15 30 30 0.9
+Possible
+
+Allocation[i][j] is the processor assigned to j'th instance of i'th task
+0  1  2
+1  0  3
+2  3  4
+
+Schedule:
+Task number, Replica number, Start Time, Finish Time
+
+Processor P0
+0  0  0  15
+1  1  15  30
+
+Processor P1
+1  0  0  15
+0  1  15  30
+
+Processor P2
+2  0  0  15
+0  2  15  30
+
+Processor P3
+1  2  0  15
+2  1  15  30
+
+Processor P4
+2  2  0  15
+
+
+Visualization of Schedule
+P0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+P1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+P2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+P3   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+P4   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+
+Energy consumed:
+135

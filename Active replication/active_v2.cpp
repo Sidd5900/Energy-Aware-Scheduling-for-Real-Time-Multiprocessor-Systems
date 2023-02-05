@@ -2,6 +2,16 @@
 
 using namespace std;
 
+// tid: task id / task number [0, n-1]
+// exe_time: execution time at fmax
+// period: time period of the task instance
+// deadline: deadline of the task instance
+// reliability: reliability target of the task instance (0 to 1)
+// freq: frequency assigned to the task instance
+// replicas: number of replicas of the task required to achieve the reliability target
+// energy: energy consumed by the task instance
+// cpu_time: actual execution time of the task instance (when running at freq)
+// arrival_time: absolute time at which the task instance arrived
 struct Task{
     int tid;
     double exe_time;
@@ -36,6 +46,7 @@ struct Schedule
     }
 };
 
+// the one with lower arrival time comes first in the priority queue
 struct arrival_time_comp{
 bool operator()(const Task &a,const Task &b)
 {
@@ -43,6 +54,7 @@ bool operator()(const Task &a,const Task &b)
 }
 };
 
+// the one with lower absolute deadline comes first in the priority queue
 struct deadline_comp{
 bool operator()(const Task &a,const Task &b)
 {
@@ -63,6 +75,8 @@ bool operator()(const Task &a,const Task &b)
 // hyperperiod : lcm of all the task periods
 // schedule[k] will store the schedule of the k'th processor
 // allocation[i][j] will store the processor assigned to j'th replica of task i
+// task_queue[k] stores all the tasks sorted by arrival time that are allocated to Processor 'k'
+// ready_queue[k] stores all the tasks sorted by absolute deadline that can be scheduled to Processor 'k' at current point of time
 int n,m,F;
 vector<Task> task;
 vector<double> freq_list;
@@ -71,7 +85,6 @@ vector<vector<Schedule>> schedule;
 int allocation[101][10];
 vector<priority_queue<Task,vector<Task>,arrival_time_comp>> task_queue;
 vector<priority_queue<Task,vector<Task>,deadline_comp>> ready_queue;
-double global_time;
 
 // compute the hyperperiod
 void find_hyperperiod()
@@ -107,6 +120,7 @@ bool schedule_edf(int task_num, int replica_num)
     schedule.clear();
     schedule.resize(m);
 
+	// push all the task instances in one hyperperiod to the task_queue of respective processors on which the task instance is allocated
     for(int i=0;i<=task_num;i++)
     {
         for(int j=0;j<=replica_num;j++)
@@ -126,13 +140,15 @@ bool schedule_edf(int task_num, int replica_num)
         }
     }
 
-    // check if all the allocated tasks in a particular processor can be allocated to it (without missing deadline) or not
+    // check if all the allocated tasks in a particular processor can be scheduled on it (without missing deadline) or not
     for(int k=0;k<m;k++)
     {
         double cur_time=0;
         while(!task_queue[k].empty())
         {
             cur_time = task_queue[k].top().arrival_time;
+			
+			// pop all task instances from the task_queue upto the current time and push them onto the ready queue
             while(!task_queue[k].empty() && task_queue[k].top().arrival_time <= cur_time)
             {
                 Task temp = task_queue[k].top();
@@ -142,6 +158,7 @@ bool schedule_edf(int task_num, int replica_num)
 
             double last_free_time=0;    // at what time was the current processor free or will be free
 
+			// schedule the tasks present in the ready queue while checking the deadline constraint
             while(!ready_queue[k].empty())
             {
                 Task temp = ready_queue[k].top();
@@ -154,6 +171,7 @@ bool schedule_edf(int task_num, int replica_num)
                     Schedule sch = Schedule(cur_time, finish_time, temp.tid);
                     schedule[k].push_back(sch);
 
+					// update the ready queue with the task instances that arrived while executing the current task
                     while(!task_queue[k].empty() && task_queue[k].top().arrival_time <= last_free_time)
                     {
                         Task temp = task_queue[k].top();
@@ -161,7 +179,7 @@ bool schedule_edf(int task_num, int replica_num)
                         ready_queue[k].push(temp);
                     }
                 }
-                else
+                else	// deadline missed
                 {
                     return false;
                 }
